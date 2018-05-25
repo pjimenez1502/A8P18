@@ -121,6 +121,8 @@ public class Main {
     }
 
     static int checkCommonWeekDay(){
+        String
 
+        return ;
     }
 }
