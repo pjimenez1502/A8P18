@@ -1,13 +1,11 @@
 package com.company;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.sun.deploy.util.ArrayUtil;
+
+import java.io.*;
+import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Main {
 
@@ -72,9 +70,57 @@ public class Main {
     static List<LogEntry> readLogs(){
         List<LogEntry> logEntries = new ArrayList<>();
 
+        try {
+
+            BufferedReader buffReader = new BufferedReader(new FileReader("access.log"));
+
+            String line;
+            while((line = buffReader.readLine()) != null) {
+
+                LogEntry logEntry = new LogEntry();
+                logEntry.scan(line);
+                logEntries.add(logEntry);
+            }
+            buffReader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return logEntries;
     }
 
     static void summarizeLogs(List<LogEntry> logEntries){
+
+        System.out.println(checkCommonHour(logEntries));
+
+
+    }
+
+    static int checkCommonHour(List<LogEntry> logEntries){
+        int[] hours = new int[24];
+
+        for (LogEntry logEntry : logEntries) {
+
+            LocalDateTime time = logEntry.dateTime;
+
+            hours[time.getHour()]++;
+        }
+
+        int max = 0;
+        int horaMax = -1;
+        for (int j = 0; j < hours.length; j++) {
+            if(hours[j] > max){
+                max = hours[j];
+                horaMax = j;
+            }
+        }
+
+        return horaMax;
+    }
+
+    static int checkCommonWeekDay(){
+
     }
 }
